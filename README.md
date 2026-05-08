@@ -2,14 +2,64 @@
 
 A full-stack Auto Garage Management System built with:
 
-- Next.js 15 (Frontend)
-- NestJS (Backend)
-- PostgreSQL
-- TypeORM
-- JWT Authentication
+- Frontend: Next.js 15 + React + TypeScript
+- Backend: NestJS + TypeORM + PostgreSQL
+- Authentication: JWT + HTTP-only Cookies
+- State Management: Zustand
+- Server State Management: React Query
+- Validation: Zod + class-validator
+- Styling: Tailwind CSS
+
+This project is designed as a scalable SaaS-style garage management platform where:
+
+- Customers can manage vehicles and service bookings
+- Mechanics can manage assigned work
+- Admins can manage users, invoices, services, and reports
+
+---
+
+# 🧪 Demo Login Credentials
+
+## Admin Login
+
+```bash
+username: admin
+password: 123456
+```
+
+## Normal User Login
+
+```bash
+username: test
+password: 123456
+```
+
+---
+
+# 📦 Tech Stack
+
+## Frontend
+
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
 - React Query
 - Zustand
-- Tailwind CSS
+- Zod
+- Lucide React Icons
+
+## Backend
+
+- NestJS
+- TypeORM
+- PostgreSQL
+- JWT Authentication
+- Passport JWT
+- bcrypt
+- class-validator
+- cookie-parser
 
 ---
 

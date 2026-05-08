@@ -40,12 +40,14 @@ export async function POST(req: Request) {
       {
         success: true,
         access_token: data.data.access_token,
-        user: data.user,
+        user: data.data.user,
       },
       {
         status: 200,
       }
     );
+
+    
 
     // ACCESS TOKEN COOKIE
     response.cookies.set("access_token", data.data.access_token, {

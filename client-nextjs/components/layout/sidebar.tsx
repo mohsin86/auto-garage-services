@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 import {
   LayoutDashboard,
@@ -101,26 +104,58 @@ const sidebarByRole = {
   ],
 };
 
+const logoutUser = async () => {
+  const res = await fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Logout failed");
+  }
+
+  return data;
+};
+
 // ======================================================
 // SIDEBAR COMPONENT
 // ======================================================
 
 export default function Sidebar() {
+  const router = useRouter();
+
   const pathname = usePathname();
+    const logoutMutation = useMutation({
+      mutationFn: logoutUser,
+
+      onSuccess: () => {
+        localStorage.removeItem("token");
+
+        router.push("/");
+      },
+    });
 
   // ======================================================
   // GET USER
   // ======================================================
 
-  let user: any = null;
+  const [user, setUser] = useState<any>(null);
 
-  if (typeof window !== "undefined") {
-    user = JSON.parse(
-      localStorage.getItem("user") || "{}"
-    );
-  }
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
 
-  const role = user?.role || "customer";
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
+
+  const role = user?.role ?? "user";
 
   // ROLE MENUS
   const menus =
@@ -202,15 +237,17 @@ export default function Sidebar() {
 
       <div className="border-t p-4">
         <button
+          onClick={() => logoutMutation.mutate()}
+
           className="
             flex w-full items-center gap-3 rounded-xl
             px-4 py-3 text-sm font-medium text-red-500
             transition hover:bg-red-50
           "
         >
-          <LogOut size={18} />
+          <LogOut size={18}   />
 
-          <span>Logout</span>
+          <span  >Logout</span>
         </button>
       </div>
     </aside>

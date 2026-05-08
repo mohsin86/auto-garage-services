@@ -26,6 +26,9 @@ const loginUser = async (data: { identifier: string; password: string }) => {
   });
 
   const result = await res.json();
+  console.log(JSON.stringify( result.user));
+  localStorage.setItem("user", JSON.stringify( result.user));
+  localStorage.setItem("token", result.access_token);
 
   if (!res.ok) {
     throw new Error(result.message || "Login failed");
@@ -56,10 +59,10 @@ export default function LoginModal({ onClose }: Props) {
       console.log("Login success:");
 
        // small delay
-      setTimeout(() => {
+     // setTimeout(() => {
         // correct client-side redirect
           router.push("/dashboard");
-      }, 100);
+     // }, 100);
 
       
 
