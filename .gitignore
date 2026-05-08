@@ -1,0 +1,99 @@
+# =========================
+# ROOT
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# NODE MODULES
+# =========================
+node_modules/
+**/node_modules/
+
+# =========================
+# BUILD FILES
+# =========================
+.next/
+dist/
+build/
+coverage/
+
+# =========================
+# ENV FILES
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# backend env
+backend/.env
+
+# frontend env
+frontend/.env
+
+# =========================
+# LOG FILES
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# TYPESCRIPT
+# =========================
+*.tsbuildinfo
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# NESTJS
+# =========================
+backend/dist/
+backend/uploads/
+
+# =========================
+# NEXTJS
+# =========================
+frontend/.next/
+frontend/out/
+
+# =========================
+# CACHE
+# =========================
+.cache/
+.turbo/
+
+# =========================
+# DATABASE
+# =========================
+*.sqlite
+*.db
+
+# =========================
+# OS FILES
+# =========================
+Desktop.ini
+
+# =========================
+# TEST
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# TEMP FILES
+# =========================
+tmp/
+temp/
+
+.history
+architecture.docx
+cookie_login.docx
+plan.docx
