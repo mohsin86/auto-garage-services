@@ -43,7 +43,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 // ---------------- API CALL ----------------
 const registerUser = async (data: RegisterFormData) => {
-  const res = await fetch("/api/register", {
+  const res = await fetch("/api/user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),

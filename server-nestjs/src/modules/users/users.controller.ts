@@ -1,3 +1,5 @@
+// File: users.controller.ts
+
 import {
   Controller,
   Get,
@@ -6,7 +8,7 @@ import {
   Param,
   Patch,
   Delete,
-  ParseIntPipe,
+  //ParseIntPipe,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
@@ -37,6 +39,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
   ) {
+    console.log('updat 1', id, dto)
     return this.service.update(id, dto);
   }
 

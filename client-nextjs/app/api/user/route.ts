@@ -13,7 +13,6 @@ export async function GET() {
     });
 
     const data = await res.json();
-
     return NextResponse.json(data, {
       status: res.status,
     });
@@ -33,7 +32,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-console.log(body)
+
     const res = await fetch(`${BACKEND_URL}/users`, {
       method: "POST",
 
@@ -45,7 +44,7 @@ console.log(body)
     });
 
     const data = await res.json();
-console.log('rest: ',data)
+
     return NextResponse.json(data, {
       status: res.status,
     });

@@ -80,7 +80,7 @@ export default function UserForm({
   async function onSubmit(data: FormData) {
     let updateUser : any;
     if (editingUser) {
-       updateUser = await fetch(`/api/users/${editingUser.id}`, {
+       updateUser = await fetch(`/api/user/${editingUser.id}`, {
         method: "PATCH",
 
         headers: {
@@ -90,17 +90,14 @@ export default function UserForm({
         body: JSON.stringify(data),
       });
     } else {
-       updateUser = await fetch("/api/users", {
+       updateUser = await fetch("/api/user", {
         method: "POST",
 
         headers: {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({
-          ...data,
-          password: "123456",
-        }),
+        body: JSON.stringify({ ...data,  password: "123456", }),
       });
     }
 
@@ -110,7 +107,6 @@ export default function UserForm({
         console.log('error',updateUser);
     }
     
-
     onSuccess();
   }
 
@@ -187,18 +183,19 @@ export default function UserForm({
       </div>
 
       {/* ROLE */}
-      <div>
+      <div className="z-100">
         <Select
           value={watch("role")}
           onValueChange={(value) =>
             setValue("role", value as FormData["role"])
           }
+          
         >
           <SelectTrigger>
             <SelectValue placeholder="Select Role" />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="admin">
               Admin
             </SelectItem>

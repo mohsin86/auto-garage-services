@@ -62,7 +62,21 @@ export async function POST(req: Request) {
     if (data.data.refresh_token) {
       response.cookies.set(
         "refresh_token",
-        data.refresh_token,
+        data.data.refresh_token,
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        }
+      );
+    }
+    // User
+    if (data.data.user) {
+      response.cookies.set(
+        "user",
+        JSON.stringify(data.data.user),
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",

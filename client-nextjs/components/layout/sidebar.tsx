@@ -32,32 +32,32 @@ const sidebarByRole = {
     },
     {
       title: "Users",
-      href: "/dashboard/users",
+      href: "/dashboard/admin/users",
       icon: Users,
     },
     {
       title: "Vehicles",
-      href: "/dashboard/vehicles",
+      href: "/dashboard/admin/vehicles",
       icon: Car,
     },
     {
       title: "Services",
-      href: "/dashboard/services",
+      href: "/dashboard/admin/services",
       icon: Wrench,
     },
     {
       title: "Invoices",
-      href: "/dashboard/invoices",
+      href: "/dashboard/admin/invoices",
       icon: Receipt,
     },
     {
       title: "Reports",
-      href: "/dashboard/reports",
+      href: "/dashboard/Reports",
       icon: ClipboardList,
     },
     {
       title: "Settings",
-      href: "/dashboard/settings",
+      href: "/dashboard/Settings",
       icon: Settings,
     },
   ],
@@ -65,40 +65,36 @@ const sidebarByRole = {
   mechanic: [
     {
       title: "Dashboard",
-      href: "/dashboard",
+      href: "/dashboard/mechanic",
       icon: LayoutDashboard,
     },
     {
       title: "Assigned Services",
       href: "/dashboard/mechanic/services",
       icon: Wrench,
-    },
-    {
-      title: "Vehicles",
-      href: "/dashboard/vehicles",
-      icon: Car,
-    },
+    }
+    
   ],
 
   customer: [
     {
       title: "Dashboard",
-      href: "/dashboard",
+      href: "/dashboard/customer",
       icon: LayoutDashboard,
     },
     {
       title: "My Vehicles",
-      href: "/dashboard/my-vehicles",
+      href: "/dashboard/customer/my-vehicles",
       icon: Car,
     },
     {
       title: "Bookings",
-      href: "/dashboard/my-bookings",
+      href: "/dashboard/customer/my-bookings",
       icon: CalendarCheck,
     },
     {
       title: "Invoices",
-      href: "/dashboard/my-invoices",
+      href: "/dashboard/customer/my-invoices",
       icon: Receipt,
     },
   ],
@@ -154,7 +150,7 @@ export default function Sidebar() {
       }
     }
   }, []);
-
+ 
   const role = user?.role ?? "user";
 
   // ROLE MENUS

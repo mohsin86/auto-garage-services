@@ -47,7 +47,7 @@ export async function PATCH(
     const { id } = await context.params;
 
     const body = await req.json();
-
+console.log('udpate ', body);
     const res = await fetch(`${BACKEND_URL}/users/${id}`, {
       method: "PATCH",
 

@@ -1,103 +1,108 @@
 import {
   Injectable,
   NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
+
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
 
 import { VehicleEntity } from './entities/vehicle.entity';
-import { UserEntity } from '../users/entities/user.entity';
+
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+
+import { UserEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class VehiclesService {
   constructor(
     @InjectRepository(VehicleEntity)
-    private readonly vehicleRepo: Repository<VehicleEntity>,
+    private repo: Repository<VehicleEntity>,
 
     @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
+    private usersRepo: Repository<UserEntity>,
   ) {}
 
-  // CREATE VEHICLE
-  async create(currentUserId: string, dto: CreateVehicleDto, isAdmin = false) {
-    const ownerId = dto.ownerId ?? currentUserId;
-
-    if (!isAdmin && dto.ownerId && dto.ownerId !== currentUserId) {
-      throw new ForbiddenException('Not allowed to assign owner');
-    }
-
-    const owner = await this.userRepo.findOneBy({ id: ownerId });
+  async create(dto: CreateVehicleDto) {
+    const owner = await this.usersRepo.findOne({
+      where: { id: dto.ownerId },
+    });
 
     if (!owner) {
       throw new NotFoundException('Owner not found');
     }
 
-    const vehicle = this.vehicleRepo.create({
-      ...dto,
+    const vehicle = this.repo.create({
+      registrationNumber: dto.registrationNumber,
+      vinNumber: dto.vinNumber,
+      brand: dto.brand,
+      model: dto.model,
+      year: dto.year,
+      color: dto.color,
+      engineNumber: dto.engineNumber,
+      chassisNumber: dto.chassisNumber,
+      mileage: dto.mileage,
       owner,
     });
 
-    return this.vehicleRepo.save(vehicle);
+    return this.repo.save(vehicle);
   }
 
-  // GET ALL VEHICLES (user scoped)
-  async findAll(userId: string, isAdmin = false) {
-    return this.vehicleRepo.find({
-      where: isAdmin ? {} : { owner: { id: userId } },
-      relations: ['owner', 'services'],
-      order: { createdAt: 'DESC' },
+  findAll() {
+    return this.repo.find({
+      relations: ['owner'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
-  // GET ONE VEHICLE
-  async findOne(id: string, userId: string, isAdmin = false) {
-    const vehicle = await this.vehicleRepo.findOne({
-      where: {
-        id,
-        ...(isAdmin ? {} : { owner: { id: userId } }),
-      },
-      relations: ['owner', 'services'],
+  async findOne(id: string) {
+    const vehicle = await this.repo.findOne({
+      where: { id },
+      relations: ['owner'],
     });
 
     if (!vehicle) {
-      throw new NotFoundException('Vehicle not found');
+      throw new NotFoundException(
+        'Vehicle not found',
+      );
     }
 
     return vehicle;
   }
 
-  // UPDATE VEHICLE
   async update(
     id: string,
-    userId: string,
     dto: UpdateVehicleDto,
-    isAdmin = false,
   ) {
-    const vehicle = await this.findOne(id, userId, isAdmin);
-
-    // prevent unauthorized owner change
-    if (!isAdmin && dto.ownerId && dto.ownerId !== userId) {
-      throw new ForbiddenException('Cannot change owner');
-    }
-
-    if (dto.ownerId && isAdmin) {
-      const owner = await this.userRepo.findOneBy({ id: dto.ownerId });
-      if (!owner) throw new NotFoundException('Owner not found');
-      vehicle.owner = owner;
-    }
+    const vehicle = await this.findOne(id);
 
     Object.assign(vehicle, dto);
 
-    return this.vehicleRepo.save(vehicle);
+    return this.repo.save(vehicle);
   }
 
-  // DELETE VEHICLE
-  async remove(id: string, userId: string, isAdmin = false) {
-    const vehicle = await this.findOne(id, userId, isAdmin);
+  async remove(id: string) {
+    const vehicle = await this.findOne(id);
 
-    return this.vehicleRepo.remove(vehicle);
+    return this.repo.remove(vehicle);
+  }
+
+  async findByOwner(ownerId: string) {
+    return this.repo.find({
+      where: {
+        owner: {
+          id: ownerId,
+        },
+      },
+
+      relations: ['owner'],
+
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }

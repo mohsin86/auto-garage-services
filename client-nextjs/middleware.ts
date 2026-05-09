@@ -10,10 +10,7 @@ const SECRET = new TextEncoder().encode(
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
-  const accessToken =
-    req.cookies.get("access_token")?.value;
-
-    
+  const accessToken = req.cookies.get("access_token")?.value;
 
   // ONLY protect dashboard
   if (pathname.startsWith("/dashboard")) {

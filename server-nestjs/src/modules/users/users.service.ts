@@ -35,9 +35,10 @@ export class UsersService {
   }
 
   findAll() {
-    return this.repo.find({
-      relations: ['vehicles'], // important for relation
-    });
+    // return this.repo.find({
+    //   relations: ['vehicles'], // important for relation
+    // });
+      return this.repo.find({});
   }
 
   async findOne(id: string) {
@@ -82,9 +83,21 @@ export class UsersService {
     return this.repo.findOne({ where: { mobile } });
   }
 
+
   async update(id: string, dto: UpdateUserDto) {
     const user = await this.findOne(id);
-    Object.assign(user, dto);
+    console.log('Updating ', user);
+    const updateData = { ...dto };
+
+    if (dto.password) {
+      updateData.password = await bcrypt.hash(
+        dto.password,
+        10
+      );
+    }
+
+    Object.assign(user, updateData);
+
     return this.repo.save(user);
   }
 

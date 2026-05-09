@@ -4,73 +4,53 @@ import {
   Post,
   Patch,
   Delete,
-  Body,
   Param,
-  Req,
-  UseGuards,
+  Body,
 } from '@nestjs/common';
 
 import { VehiclesService } from './vehicles.service';
+
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
-import { JwtAuthGuard } from '../../modules/auth/jwt-auth.guard';
 
 @Controller('vehicles')
-@UseGuards(JwtAuthGuard)
 export class VehiclesController {
-  constructor(private readonly vehiclesService: VehiclesService) {}
+  constructor(
+    private service: VehiclesService,
+  ) {}
 
-  // CREATE
   @Post()
-  create(@Req() req: any, @Body() dto: CreateVehicleDto) {
-    return this.vehiclesService.create(
-      req.user.sub,
-      dto,
-      req.user.role === 'admin',
-    );
+  create(@Body() dto: CreateVehicleDto) {
+    return this.service.create(dto);
   }
 
-  // GET ALL
   @Get()
-  findAll(@Req() req: any) {
-    return this.vehiclesService.findAll(
-      req.user.sub,
-      req.user.role === 'admin',
-    );
+  findAll() {
+    return this.service.findAll();
   }
 
-  // GET ONE
   @Get(':id')
-  findOne(@Req() req: any, @Param('id') id: string) {
-    return this.vehiclesService.findOne(
-      id,
-      req.user.sub,
-      req.user.role === 'admin',
-    );
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
   }
 
-  // UPDATE
   @Patch(':id')
   update(
-    @Req() req: any,
     @Param('id') id: string,
     @Body() dto: UpdateVehicleDto,
   ) {
-    return this.vehiclesService.update(
-      id,
-      req.user.sub,
-      dto,
-      req.user.role === 'admin',
-    );
+    return this.service.update(id, dto);
   }
 
-  // DELETE
   @Delete(':id')
-  remove(@Req() req: any, @Param('id') id: string) {
-    return this.vehiclesService.remove(
-      id,
-      req.user.sub,
-      req.user.role === 'admin',
-    );
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
+  }
+
+  @Get('/owner/:ownerId')
+  findByOwner(
+    @Param('ownerId') ownerId: string,
+  ) {
+    return this.service.findByOwner(ownerId);
   }
 }

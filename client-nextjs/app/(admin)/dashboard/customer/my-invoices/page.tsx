@@ -1,4 +1,4 @@
-export default function GenerateBillPage() {
+export default function MyInvoicesPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Generate Invoices</h1>
