@@ -48,11 +48,13 @@ export class ServiceEntity {
 
   @Column({
     nullable: true,
+    type: "date",
   })
   serviceDate!: Date;
 
   @Column({
     nullable: true,
+    type: "date",
   })
   deliveryDate!: Date;
 

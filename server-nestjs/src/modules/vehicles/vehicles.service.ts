@@ -49,9 +49,25 @@ export class VehiclesService {
     return this.repo.save(vehicle);
   }
 
-  findAll() {
+  async findAll() {
     return this.repo.find({
       relations: ['owner'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  async findByOwner(ownerId: string) {
+    return this.repo.find({
+      where: {
+        owner: {
+          id: ownerId,
+        },
+      },
+
+      relations: ['owner'],
+
       order: {
         createdAt: 'DESC',
       },
@@ -90,19 +106,5 @@ export class VehiclesService {
     return this.repo.remove(vehicle);
   }
 
-  async findByOwner(ownerId: string) {
-    return this.repo.find({
-      where: {
-        owner: {
-          id: ownerId,
-        },
-      },
-
-      relations: ['owner'],
-
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-  }
+  
 }

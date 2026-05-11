@@ -23,7 +23,19 @@ import {
 // ROLE-BASED SIDEBAR CONFIG
 // ======================================================
 
-const sidebarByRole = {
+type SubMenu = {
+  title: string;
+  href: string;
+};
+
+type MenuItem = {
+  title: string;
+  href: string;
+  icon: any;
+  children?: SubMenu[];
+};
+
+const sidebarByRole: Record<string, MenuItem[]> = {
   admin: [
     {
       title: "Dashboard",
@@ -42,8 +54,18 @@ const sidebarByRole = {
     },
     {
       title: "Services",
-      href: "/dashboard/admin/services",
+      href: "/dashboard/admin/services/list",
       icon: Wrench,
+      children: [
+            {
+              title: "List Services",
+              href: "/dashboard/admin/services",
+            },
+            {
+              title: "Create Service",
+              href: "/dashboard/admin/services/create",
+            },
+          ],
     },
     {
       title: "Invoices",
@@ -154,10 +176,7 @@ export default function Sidebar() {
   const role = user?.role ?? "user";
 
   // ROLE MENUS
-  const menus =
-    sidebarByRole[
-      role as keyof typeof sidebarByRole
-    ] || [];
+  const menus = sidebarByRole[role as keyof typeof sidebarByRole] || [];
 
   return (
     <aside className="hidden md:flex h-screen w-64 flex-col border-r bg-white">
@@ -206,23 +225,35 @@ export default function Sidebar() {
             pathname.startsWith(menu.href + "/");
 
           return (
-            <Link
-              key={menu.href}
-              href={menu.href}
-              className={`
-                flex items-center gap-3 rounded-xl px-4 py-3
-                text-sm font-medium transition-all
-                ${
-                  active
-                    ? "bg-black text-white shadow-md"
-                    : "text-gray-700 hover:bg-gray-100"
-                }
-              `}
-            >
-              <Icon size={18} />
+            <div key={menu.href}>
+                <Link key={menu.href}  
+                      href={menu.href}>
+                  <div 
+                    className={`
+                    flex items-center gap-3 rounded-xl px-4 py-3
+                    text-sm font-medium transition-all
+                    ${
+                      active
+                        ? "bg-black text-white shadow-md"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }
+                  `}
+                  >
+                    <Icon size={18} />
+                    <span>{menu.title}</span>
+                  </div>
+                </Link>
 
-              <span>{menu.title}</span>
-            </Link>
+                {menu.children?.map((sub) => (
+                  <Link
+                    key={sub.href}
+                    href={sub.href}
+                    className="ml-10 block py-2 text-sm text-gray-600"
+                  >
+                    {sub.title}
+                  </Link>
+                ))}
+              </div>
           );
         })}
       </nav>
